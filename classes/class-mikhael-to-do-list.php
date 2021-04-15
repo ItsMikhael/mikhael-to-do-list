@@ -18,13 +18,14 @@ class MikhaelToDoList
         add_action('admin_init', array($this, 'todolist_create_table'));
         add_action('admin_menu', array($this, 'register_todolist_page'));
         add_action('admin_enqueue_scripts', array($this, 'todolist_admin_enqueue_scripts'));
-        add_action( 'wp_ajax_todolist_create_new_task', array($this, 'todolist_create_new_task') );
+        add_action('wp_ajax_todolist_create_new_task', array($this, 'todolist_create_new_task'));
+        add_action('wp_ajax_todolist_delete_task', array($this, 'todolist_delete_task'));
     }
 
     /**
      * Create the DB table
      */
-    static function todolist_create_table() {
+    function todolist_create_table() {
         global $wpdb;
 
         if (!current_user_can('activate_plugins')) return;
@@ -41,11 +42,13 @@ class MikhaelToDoList
 			date varchar(50)  NOT NULL DEFAULT '',	
 			priority varchar(50) NOT NULL DEFAULT '',
 			status varchar(50) NOT NULL DEFAULT '',
-			user_id mediumint(10) NOT NULL DEFAULT '',
+			user_id int NOT NULL,
 			PRIMARY KEY (id)
 			) " . $charset_collate . ";";
 
-            $wpdb->query($wpdb->prepare($sql));
+            $prepared = $wpdb->prepare($sql);
+
+            $wpdb->query($prepared);
         }
     }
 
@@ -66,12 +69,15 @@ class MikhaelToDoList
         wp_add_inline_script('todolist-scripts', 'var ajaxurl = "'. admin_url('admin-ajax.php') . '";');
     }
 
+    /**
+     * Create a new task
+     */
     function todolist_create_new_task() {
         global $wpdb;
         $user_id = get_current_user_id();
 
         $table_name  = $wpdb->prefix .'todolist';
-        $wpdb->insert($table_name, array(
+        $inserted = $wpdb->insert($table_name, array(
 
             'text' => esc_html__($_POST['task']),
             'date' => esc_html__($_POST['date']),
@@ -81,9 +87,44 @@ class MikhaelToDoList
 
         ), array('%s', '%s', '%s', '%s', '%d'));
 
-        echo json_encode([
-            'result' => 'result',
-        ]);
+        if ($inserted) {
+            echo json_encode([
+                'result' => 'success',
+                'task_id' => $wpdb->insert_id,
+            ]);
+        } else {
+            echo json_encode([
+                'result' => 'fail',
+            ]);
+        }
+
+
+        wp_die();
+    }
+
+    /**
+     * Delete a task
+     */
+    function todolist_delete_task() {
+        global $wpdb;
+
+        $table_name  = $wpdb->prefix .'todolist';
+        $removed = $wpdb->delete($table_name, array(
+
+            'id' => $_POST['task_id'],
+
+        ), array('%d'));
+
+        if ($removed) {
+            echo json_encode([
+                'result' => 'success',
+            ]);
+        } else {
+            echo json_encode([
+                'result' => 'fail',
+            ]);
+        }
+
 
         wp_die();
     }

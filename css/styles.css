@@ -53,3 +53,7 @@
 .to-do-list__buttons {
     width: 15%;
 }
+
+.to-do-list__delete-task {
+    cursor: pointer;
+}
