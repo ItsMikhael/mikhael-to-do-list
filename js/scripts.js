@@ -33,7 +33,8 @@ jQuery(document).ready(function () {
         jQuery('.todolist-modal_edit input[type=date]').val(task_deadline);
     });
 
-    todolist.on('click', '.to-do-list__task-done', function() {
+    /* Set task to done after clicking the icon */
+    todolist.on('click', '.to-do-list__task-done', function () {
         const list_item = jQuery(this).parents('.to-do-list__item')
         const task_id = list_item.data('task-id');
 
@@ -65,6 +66,31 @@ jQuery(document).ready(function () {
         delete_task(task_id);
     });
 
+    /* Save task creation when Enter is pressed */
+    jQuery('.todolist-modal_create').on('keyup', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+
+            const task_text = jQuery('.todolist-modal_create input[type=text]').val();
+            const task_prio = jQuery('.todolist-modal_create select').val();
+            const task_deadline = jQuery('.todolist-modal_create input[type=date]').val();
+
+            create_task(task_text, task_prio, task_deadline);
+        }
+    });
+
+    /* Save task edition when Enter is pressed */
+    jQuery('.todolist-modal_edit').on('keyup', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+
+            const task_id = jQuery('.todolist-modal_edit input[type=text]').data('task-id');
+            const task_text = jQuery('.todolist-modal_edit input[type=text]').val();
+            const task_prio = jQuery('.todolist-modal_edit select').val();
+            const task_deadline = jQuery('.todolist-modal_edit input[type=date]').val();
+
+            update_task(task_text, task_prio, task_deadline, task_id);
+        }
+    });
+
     jQuery('.close-modal-button').on('click', function () {
         jQuery(this).closest('.todolist-modal').hide();
     });
@@ -90,8 +116,9 @@ jQuery(document).ready(function () {
                 const response_decoded = JSON.parse(response);
                 // Append the list with the new task after it has been successfully added
                 if (response_decoded.result === 'success') {
+                    const prio_class = get_prio_class(task_prio);
                     jQuery(".to-do-list").prepend(`
-                                <div class="to-do-list__item" data-task-id="${response_decoded.task_id}">
+                                <div class="to-do-list__item ${prio_class}" data-task-id="${response_decoded.task_id}">
                                     <span class="to-do-list__item-title">
                                         ${task_text}
                                     </span>
@@ -114,6 +141,7 @@ jQuery(document).ready(function () {
                             `)
                     jQuery('.todolist-modal_create input[type=text]').val('');
                     jQuery('.todolist-modal_create').hide();
+                    jQuery(".to-do-list").pagify(5, ".to-do-list__item")
                 }
             }
         );
@@ -133,7 +161,12 @@ jQuery(document).ready(function () {
                 const response_decoded = JSON.parse(response);
                 // Append the list with the new task after it has been successfully added
                 if (response_decoded.result === 'success') {
+                    const prio_class = get_prio_class(task_prio);
+
                     let list_item = jQuery('.to-do-list__item[data-task-id=' + task_id + ']');
+                    list_item.removeClass();
+                    list_item.addClass('to-do-list__item');
+                    list_item.addClass(prio_class);
                     jQuery(list_item).find('.to-do-list__item-title').html(task_text);
                     jQuery(list_item).find('.to-do-list__priority').html(task_prio);
                     jQuery(list_item).find('.to-do-list__deadline').html(task_deadline);
@@ -159,6 +192,7 @@ jQuery(document).ready(function () {
                     list_item.addClass('task_done');
                     list_item.find('.to-do-list__task-done').remove();
                     list_item.find('.to-do-list__edit-task').remove();
+                    list_item.find('.to-do-list__priority').html('');
                 }
             }
         );
@@ -181,5 +215,20 @@ jQuery(document).ready(function () {
         );
     }
 
-});
+    /* Function for getting prio class based on priority */
+    function get_prio_class(task_prio) {
+        let prio_class = '';
+        if (task_prio === 'Low Priority') {
+            prio_class = 'task_prio_low';
+        } else if (task_prio === 'Medium Priority') {
+            prio_class = 'task_prio_med';
+        } else {
+            prio_class = 'task_prio_high';
+        }
+
+        return prio_class;
+    }
+
+})
+;
 

@@ -45,6 +45,7 @@
     display: flex;
     width: 100%;
     border-radius: 8px;
+    background-color: lightgray;
 }
 
 .to-do-list__item > * {
@@ -192,6 +193,23 @@
     display: inline-block;
 }
 
+.task_prio_low {
+
+}
+
+.task_prio_med {
+    background-color: orange;
+}
+
+.task_prio_high {
+    background-color: orangered;
+    color: white;
+}
+
+.task_prio_high .to-do-list__delete-task {
+    color: black;
+}
+
 .task_done {
     background-color: var(--clr-green);
 }
@@ -214,7 +232,7 @@
      cursor:not-allowed;
 }
 .pagination a.current{
-     background:#f3f3f3;
+     color: black;
 }
 
 

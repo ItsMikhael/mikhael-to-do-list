@@ -2,13 +2,19 @@
 global $wpdb;
 $table_name = $wpdb->prefix . 'todolist';
 
-$tasksPending = $wpdb->get_results(
+/*$tasksPendingLow = $wpdb->get_results(
         "SELECT * FROM " . $table_name .
-        " WHERE status='pending';"
-);
+              " WHERE status='pending'
+               AND priority='Low priority'
+                ORDER BY date ASC;"
+);*/
+$tasksPendingLow = $mikhael_to_do_list->get_pending_tasks('Low Priority');
+$tasksPendingMedium = $mikhael_to_do_list->get_pending_tasks('Medium Priority');
+$tasksPendingHigh = $mikhael_to_do_list->get_pending_tasks('High Priority');
 $tasksDone = $wpdb->get_results(
         "SELECT * FROM " . $table_name .
-        " WHERE status='done';"
+        " WHERE status='done'
+        ORDER BY date ASC;"
 );
 ?>
 
@@ -20,9 +26,57 @@ $tasksDone = $wpdb->get_results(
 
     <div class="to-do-list">
 
-        <?php if ($tasksPending): ?>
-            <?php foreach ($tasksPending as $task): ?>
-                <div class="to-do-list__item" data-task-id="<?php echo $task->id ?>">
+        <?php if ($tasksPendingHigh): ?>
+            <?php foreach ($tasksPendingHigh as $task): ?>
+                <div class="to-do-list__item task_prio_high" data-task-id="<?php echo $task->id ?>">
+                    <span class="to-do-list__item-title">
+                        <?php echo $task->text ?>
+                    </span>
+                    <span class="to-do-list__priority">
+                        <?php echo $task->priority ?>
+                    </span>
+                    <span class="to-do-list__deadline">
+                        <?php echo $task->date ?>
+                    </span>
+                    <span class="to-do-list__buttons">
+                        <span class="to-do-list__task-done">
+                            <img src="<?php echo plugin_dir_url(__DIR__) . 'images/done.svg' ?>" alt="done icon">
+                        </span>
+                        <span class="to-do-list__edit-task">
+                            <img src="<?php echo plugin_dir_url(__DIR__) . 'images/edit_icon.svg' ?>" alt="edit icon">
+                        </span>
+                        <span class="to-do-list__delete-task">X</span>
+                    </span>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+        <?php if ($tasksPendingMedium): ?>
+            <?php foreach ($tasksPendingMedium as $task): ?>
+                <div class="to-do-list__item task_prio_med" data-task-id="<?php echo $task->id ?>">
+                    <span class="to-do-list__item-title">
+                        <?php echo $task->text ?>
+                    </span>
+                    <span class="to-do-list__priority">
+                        <?php echo $task->priority ?>
+                    </span>
+                    <span class="to-do-list__deadline">
+                        <?php echo $task->date ?>
+                    </span>
+                    <span class="to-do-list__buttons">
+                        <span class="to-do-list__task-done">
+                            <img src="<?php echo plugin_dir_url(__DIR__) . 'images/done.svg' ?>" alt="done icon">
+                        </span>
+                        <span class="to-do-list__edit-task">
+                            <img src="<?php echo plugin_dir_url(__DIR__) . 'images/edit_icon.svg' ?>" alt="edit icon">
+                        </span>
+                        <span class="to-do-list__delete-task">X</span>
+                    </span>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+        <?php if ($tasksPendingLow): ?>
+            <?php foreach ($tasksPendingLow as $task): ?>
+                <div class="to-do-list__item task_prio_low" data-task-id="<?php echo $task->id ?>">
                     <span class="to-do-list__item-title">
                         <?php echo $task->text ?>
                     </span>
@@ -51,7 +105,6 @@ $tasksDone = $wpdb->get_results(
                         <?php echo $task->text ?>
                     </span>
                     <span class="to-do-list__priority">
-                        <?php echo $task->priority ?>
                     </span>
                     <span class="to-do-list__deadline">
                         <?php echo $task->date ?>

@@ -127,7 +127,7 @@ class MikhaelToDoList
 
         ), array(
             'id' => $_POST['task_id'],
-        ), array('%s', '%s', '%s', '%d', '%d'));
+        ), array('%s', '%s', '%s', '%s', '%d', '%d'));
 
         if ($updated) {
             echo json_encode([
@@ -195,6 +195,18 @@ class MikhaelToDoList
 
 
         wp_die();
+    }
+
+    public function get_pending_tasks($prio) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'todolist';
+
+        return $wpdb->get_results(
+            "SELECT * FROM " . $table_name .
+            " WHERE status='pending'
+               AND priority='". $prio ."'
+                ORDER BY date ASC;"
+        );
     }
 
     /**
