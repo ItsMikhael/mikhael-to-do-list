@@ -19,6 +19,7 @@ class MikhaelToDoList
         add_action('admin_menu', array($this, 'register_todolist_page'));
         add_action('admin_enqueue_scripts', array($this, 'todolist_admin_enqueue_scripts'));
         add_action('wp_ajax_todolist_create_new_task', array($this, 'todolist_create_new_task'));
+        add_action('wp_ajax_todolist_update_task', array($this, 'todolist_update_task'));
         add_action('wp_ajax_todolist_delete_task', array($this, 'todolist_delete_task'));
     }
 
@@ -66,7 +67,10 @@ class MikhaelToDoList
     function todolist_admin_enqueue_scripts() {
         wp_enqueue_style('todolist-styles', plugin_dir_url(__DIR__) . 'css/styles.css', array());
         wp_enqueue_script('todolist-scripts', plugin_dir_url(__DIR__) . 'js/scripts.js', array('jquery'));
-        wp_add_inline_script('todolist-scripts', 'var ajaxurl = "'. admin_url('admin-ajax.php') . '";');
+        wp_add_inline_script('todolist-scripts', '
+            var ajaxurl = "'. admin_url('admin-ajax.php') . '";
+            var plugin_url = "' . plugin_dir_url(__DIR__) . '";
+        ');
     }
 
     /**
@@ -91,6 +95,40 @@ class MikhaelToDoList
             echo json_encode([
                 'result' => 'success',
                 'task_id' => $wpdb->insert_id,
+            ]);
+        } else {
+            echo json_encode([
+                'result' => 'fail',
+            ]);
+        }
+
+
+        wp_die();
+    }
+
+    /**
+     * Update the task
+     */
+    function todolist_update_task() {
+        global $wpdb;
+        $user_id = get_current_user_id();
+
+        $table_name  = $wpdb->prefix .'todolist';
+        $updated = $wpdb->update($table_name, array(
+
+            'text' => esc_html__($_POST['task_text']),
+            'date' => esc_html__($_POST['task_deadline']),
+            'priority' => esc_html__($_POST['task_prio']),
+            'status' => 'pending',
+            'user_id' => $user_id,
+
+        ), array(
+            'id' => $_POST['task_id'],
+        ), array('%s', '%s', '%s', '%d', '%d'));
+
+        if ($updated) {
+            echo json_encode([
+                'result' => 'success',
             ]);
         } else {
             echo json_encode([

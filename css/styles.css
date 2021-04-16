@@ -23,8 +23,8 @@
     margin: 2.5rem 0 3.75rem 0;
 }
 
-.todolist-wrapper input[type=text]:focus {
-    box-shadow: 0 4px 0 0 var(--clr-accent);
+.input_underline:focus {
+    box-shadow: 0 4px 0 0 var(--clr-accent) !important;
 }
 
 .to-do-list__item {
@@ -50,8 +50,21 @@
     text-align: right;
 }
 
-.to-do-list__delete-task {
+.to-do-list__buttons > * {
     cursor: pointer;
+    display: inline-block;
+    margin-left: 0.35rem;
+}
+
+.to-do-list__edit-task img {
+    height: 22px;
+}
+
+.to-do-list__delete-task {
+    height: 22px;
+    vertical-align: top;
+    padding: 2px 0;
+    color: red;
 }
 
 .todolist-modal {

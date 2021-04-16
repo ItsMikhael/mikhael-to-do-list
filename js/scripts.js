@@ -1,12 +1,7 @@
 jQuery(document).ready(function () {
+    let todolist = jQuery('.to-do-list');
 
-    /* Delete the task after pressing the delete button */
-    jQuery('.to-do-list').on("click", ".to-do-list__delete-task", function () {
-        const task_id = jQuery(this).parents('.to-do-list__item').data('task-id');
-        delete_task(task_id);
-    })
-
-    /* Create a task after pressing enter within the input */
+    /* Open up the task creation modal after pressing enter on the main input */
     jQuery('.create-task-input').on('keyup', function (e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
 
@@ -19,12 +14,48 @@ jQuery(document).ready(function () {
         }
     });
 
+    /* Open up the task edition modal */
+    todolist.on('click', '.to-do-list__edit-task', function () {
+        const list_item = jQuery(this).parents('.to-do-list__item')
+
+        jQuery('.todolist-modal_edit').show();
+
+        // Get current task details
+        const task_id = list_item.data('task-id');
+        const task_text = list_item.children('.to-do-list__item-title').html().trim();
+        const task_prio = list_item.children('.to-do-list__priority').html().trim();
+        const task_deadline = list_item.children('.to-do-list__deadline').html().trim();
+
+        // Update the modal with current task details
+        jQuery('.todolist-modal_edit input[type=text]').attr('data-task-id', task_id);
+        jQuery('.todolist-modal_edit input[type=text]').val(task_text);
+        jQuery('.todolist-modal_edit #priority').val(task_prio);
+        jQuery('.todolist-modal_edit input[type=date]').val(task_deadline);
+    })
+
+    // Run create task function after pressing save on create task modal
     jQuery('.create-task-button').on('click', function () {
         const task_text = jQuery('.todolist-modal_create input[type=text]').val();
         const task_prio = jQuery('.todolist-modal_create select').val();
         const task_deadline = jQuery('.todolist-modal_create input[type=date]').val();
 
         create_task(task_text, task_prio, task_deadline);
+    })
+
+    // Run update task function after pressing save on edit task modal
+    jQuery('.edit-task-button').on('click', function () {
+        const task_id = jQuery('.todolist-modal_edit input[type=text]').data('task-id');
+        const task_text = jQuery('.todolist-modal_edit input[type=text]').val();
+        const task_prio = jQuery('.todolist-modal_edit select').val();
+        const task_deadline = jQuery('.todolist-modal_edit input[type=date]').val();
+
+        update_task(task_text, task_prio, task_deadline, task_id);
+    })
+
+    /* Delete the task after pressing the delete button */
+    todolist.on("click", ".to-do-list__delete-task", function () {
+        const task_id = jQuery(this).parents('.to-do-list__item').data('task-id');
+        delete_task(task_id);
     })
 
     jQuery('.close-modal-button').on('click', function () {
@@ -64,12 +95,40 @@ jQuery(document).ready(function () {
                                         ${task_deadline}
                                     </span>
                                     <span class="to-do-list__buttons">
+                                    <span class="to-do-list__edit-task">
+                                        <img src="` + plugin_url + `images/edit_icon.svg" alt="edit icon">
+                                    </span>
                                         <span class="to-do-list__delete-task">X</span>
                                     </span>
                                 </div>
                             `)
                     jQuery('.todolist-modal_create input[type=text]').val('');
-                    jQuery(this).closest('.todolist-modal').hide();
+                    jQuery('.todolist-modal_create').hide();
+                }
+            }
+        );
+    }
+
+    /* The function handling task edition */
+    function update_task(task_text, task_prio, task_deadline, task_id) {
+        let data = {
+            'action': 'todolist_update_task',
+            'task_text': task_text,
+            'task_prio': task_prio,
+            'task_deadline': task_deadline,
+            'task_id': task_id,
+        }
+
+        jQuery.post(ajaxurl, data, function (response) {
+                const response_decoded = JSON.parse(response);
+                // Append the list with the new task after it has been successfully added
+                if (response_decoded.result === 'success') {
+                    let list_item = jQuery('.to-do-list__item[data-task-id=' + task_id + ']');
+                    jQuery(list_item).find('.to-do-list__item-title').html(task_text);
+                    jQuery(list_item).find('.to-do-list__priority').html(task_prio);
+                    jQuery(list_item).find('.to-do-list__deadline').html(task_deadline);
+                    jQuery('.todolist-modal_edit input[type=text]').val('');
+                    jQuery('.todolist-modal_edit').hide();
                 }
             }
         );

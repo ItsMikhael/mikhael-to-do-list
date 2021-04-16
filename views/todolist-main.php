@@ -26,6 +26,9 @@ $tasks = $wpdb->get_results("SELECT * FROM " . $table_name);
                         <?php echo $task->date ?>
                     </span>
                     <span class="to-do-list__buttons">
+                        <span class="to-do-list__edit-task">
+                            <img src="<?php echo plugin_dir_url(__DIR__) . 'images/edit_icon.svg' ?>" alt="edit icon">
+                        </span>
                         <span class="to-do-list__delete-task">X</span>
                     </span>
                 </div>
@@ -66,19 +69,32 @@ $tasks = $wpdb->get_results("SELECT * FROM " . $table_name);
     </div>
 </div>
 
-<!-- An example of the list item -->
-
-<!--<div class="to-do-list__item">
-            <span class="to-do-list__item-title">
-                Some kind of a task needed to be done
-            </span>
-    <span class="to-do-list__priority">
-                High priority
-            </span>
-    <span class="to-do-list__deadline">
-                March 10
-            </span>
-    <span class="to-do-list__buttons">
-                <span class="to-do-list__delete-task">X</span>
-            </span>
-</div>-->
+<div class="todolist-modal todolist-modal_edit">
+    <div class="todolist-modal__background">
+        <div class="todolist-modal__wrapper">
+            <div class="todolist-modal__container">
+                <div class="todolist-modal__header">
+                    <h2 class="todolist-modal__heading heading_inline">Task details</h2>
+                    <span class="close-mobile-icon">
+                        X
+                    </span>
+                </div>
+                <div class="todolist-modal__body">
+                    <input type="text" class="input_underline input_width_full">
+                    <div class="split-flex">
+                        <select name="priority" id="priority">
+                            <option value="Low Priority">Low Priority</option>
+                            <option value="Medium Priority">Medium Priority</option>
+                            <option value="High Priority">High Priority</option>
+                        </select>
+                        <input type="date" min="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+                    </div>
+                </div>
+                <div class="todolist-modal__footer">
+                    <button class="button_todolist close-modal-button">Close</button>
+                    <button class="button_todolist button_color_accent_darker edit-task-button">Save task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
