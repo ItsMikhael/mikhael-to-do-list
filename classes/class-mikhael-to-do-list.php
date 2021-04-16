@@ -79,10 +79,10 @@ class MikhaelToDoList
         $table_name  = $wpdb->prefix .'todolist';
         $inserted = $wpdb->insert($table_name, array(
 
-            'text' => esc_html__($_POST['task']),
-            'date' => esc_html__($_POST['date']),
-            'priority' => esc_html__($_POST['priority']),
-            'status' => esc_html__($_POST['status']),
+            'text' => esc_html__($_POST['task_text']),
+            'date' => esc_html__($_POST['task_deadline']),
+            'priority' => esc_html__($_POST['task_prio']),
+            'status' => 'pending',
             'user_id' => $user_id,
 
         ), array('%s', '%s', '%s', '%s', '%d'));

@@ -1,10 +1,16 @@
+:root {
+    --clr-main: #e6e6e6;
+    --clr-accent: #11cdef;
+    --clr-accent-darker: #5e72e4;
+}
+
 .todolist-wrapper {
-    margin: 2.5rem 5rem;
+    margin: 4rem 5rem;
     padding: 2.5rem 7.75rem;
     box-shadow: 0 0 0.5rem gray;
-    height: auto;
-    min-height: 500px;
-    background-color: #e6e6e6;
+
+    height: 650px;
+    background-color: var(--clr-main);
     font-size: 20px;
 }
 
@@ -13,23 +19,12 @@
     font-size: 36px;
 }
 
-.todolist-wrapper input[type=text] {
-    width: 100%;
-    border: none;
-    /*border-bottom: 2px solid #11cdef;*/
-    background-color: #e6e6e6;
-    border-radius: 0;
-    transition: 0.15s linear box-shadow;
-    box-sizing:border-box;
-    box-shadow: 0 2px 0 0 #11cdef;
-}
-
 .create-task-input {
-    margin-bottom: 3.75rem;
+    margin: 2.5rem 0 3.75rem 0;
 }
 
 .todolist-wrapper input[type=text]:focus {
-    box-shadow: 0 4px 0 0 #11cdef;
+    box-shadow: 0 4px 0 0 var(--clr-accent);
 }
 
 .to-do-list__item {
@@ -52,8 +47,131 @@
 
 .to-do-list__buttons {
     width: 15%;
+    text-align: right;
 }
 
 .to-do-list__delete-task {
     cursor: pointer;
 }
+
+.todolist-modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    display: none;
+}
+
+.todolist-modal__background {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    height: 100%;
+    width: 100%;
+}
+
+.todolist-modal__wrapper {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 450px;
+    height: 315px;
+    background-color: white;
+    box-shadow: 0 0 0.35rem black;
+}
+
+.todolist-modal__header {
+    padding: 0 2rem;
+    font-size: 16px;
+    border-bottom: 1px solid var(--clr-main);
+}
+
+.todolist-modal__footer {
+    position: absolute;
+    bottom: 0;
+    padding: 1rem 2rem;
+    border-top: 1px solid var(--clr-main);
+    display: flex;
+    justify-content: right;
+    width: calc(100% - 4rem);
+    gap: 1rem;
+}
+
+.todolist-modal__container {
+    position: relative;
+    height: 100%;
+}
+
+.todolist-modal__body {
+    padding: 2rem 2rem;
+}
+
+.todolist-modal__body > * {
+    margin-bottom: 3.25rem;
+}
+
+.split-flex {
+    display: flex;
+    gap: 1rem;
+}
+
+.split-flex > * {
+    width: 100%;
+
+}
+
+.button_todolist {
+    padding: 0.75rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: 0.3s ease all;
+}
+
+.button_todolist:hover {
+    box-shadow: 0 0 0.25rem black;
+}
+
+.button_color_accent_darker {
+    background-color: var(--clr-accent-darker);
+    color: white;
+}
+
+.input_underline {
+    box-shadow: 0 2px 0 0 var(--clr-accent) !important;
+    transition: 0.15s linear box-shadow !important;
+    border-radius: 0 !important;
+    border: none !important;
+}
+
+.input_color_main {
+    background-color: var(--clr-main) !important;
+}
+
+.input_width_full {
+    width: 100%;
+}
+
+.heading_inline {
+    display: inline-block;
+}
+
+@media (max-width: 576px) {
+    .todolist-modal__wrapper {
+        top: 0;
+        left: 0;
+        transform: none;
+    }
+}
+
+@media (min-width: 576px) {
+    .close-mobile-icon {
+        display: none;
+    }
+}
+
