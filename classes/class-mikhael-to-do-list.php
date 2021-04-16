@@ -58,7 +58,7 @@ class MikhaelToDoList
      * Register a custom menu page.
      */
     function register_todolist_page() {
-        add_menu_page('Custom Menu Title', 'To-do List', 'read', 'mikhael-to-do-list/views/todolist-main.php', '');
+        add_menu_page('Custom Menu Title', 'To-do List', 'read', plugin_dir_path(__DIR__) . 'views/todolist-main.php', '');
     }
 
 
