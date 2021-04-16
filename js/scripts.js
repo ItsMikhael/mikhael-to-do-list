@@ -90,7 +90,7 @@ jQuery(document).ready(function () {
                 const response_decoded = JSON.parse(response);
                 // Append the list with the new task after it has been successfully added
                 if (response_decoded.result === 'success') {
-                    jQuery(".to-do-list").append(`
+                    jQuery(".to-do-list").prepend(`
                                 <div class="to-do-list__item" data-task-id="${response_decoded.task_id}">
                                     <span class="to-do-list__item-title">
                                         ${task_text}

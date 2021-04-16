@@ -72,6 +72,8 @@ class MikhaelToDoList
             var ajaxurl = "'. admin_url('admin-ajax.php') . '";
             var plugin_url = "' . plugin_dir_url(__DIR__) . '";
         ');
+
+        wp_enqueue_script('todolist-pagination', plugin_dir_url(__DIR__) . 'js/pagination.js', array('jquery'));
     }
 
     /**

@@ -196,6 +196,28 @@
     background-color: var(--clr-green);
 }
 
+.pagination {
+    padding: 20px;
+}
+.pagination *{
+    user-select: none;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 0 10px;
+    cursor: pointer;
+}
+.pagination a.disabled{
+     opacity:.3;
+     pointer-events: none;
+     cursor:not-allowed;
+}
+.pagination a.current{
+     background:#f3f3f3;
+}
+
+
 @media (max-width: 576px) {
     .todolist-modal__wrapper {
         top: 0;
