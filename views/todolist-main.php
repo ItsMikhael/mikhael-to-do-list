@@ -35,8 +35,12 @@ $tasksDone = $wpdb->get_results(
                     <span class="to-do-list__priority">
                         <?php echo $task->priority ?>
                     </span>
-                    <span class="to-do-list__deadline">
-                        <?php echo $task->date ?>
+                    <span class="to-do-list__deadline" data-date="<?php echo $task->date ?>">
+                        <?php
+                        $date = date_create_from_format('Y-m-d', $task->date);
+                        $formattedDate = $date->format('M d')
+                        ;?>
+                        <?php echo $formattedDate ?>
                     </span>
                     <span class="to-do-list__buttons">
                         <span class="to-do-list__task-done">
@@ -59,8 +63,12 @@ $tasksDone = $wpdb->get_results(
                     <span class="to-do-list__priority">
                         <?php echo $task->priority ?>
                     </span>
-                    <span class="to-do-list__deadline">
-                        <?php echo $task->date ?>
+                    <span class="to-do-list__deadline" data-date="<?php echo $task->date ?>">
+                        <?php
+                        $date = date_create_from_format('Y-m-d', $task->date);
+                        $formattedDate = $date->format('M d')
+                        ;?>
+                        <?php echo $formattedDate ?>
                     </span>
                     <span class="to-do-list__buttons">
                         <span class="to-do-list__task-done">
@@ -83,8 +91,12 @@ $tasksDone = $wpdb->get_results(
                     <span class="to-do-list__priority">
                         <?php echo $task->priority ?>
                     </span>
-                    <span class="to-do-list__deadline">
-                        <?php echo $task->date ?>
+                    <span class="to-do-list__deadline" data-date="<?php echo $task->date ?>">
+                        <?php
+                        $date = date_create_from_format('Y-m-d', $task->date);
+                        $formattedDate = $date->format('M d')
+                        ;?>
+                        <?php echo $formattedDate ?>
                     </span>
                     <span class="to-do-list__buttons">
                         <span class="to-do-list__task-done">
@@ -106,8 +118,12 @@ $tasksDone = $wpdb->get_results(
                     </span>
                     <span class="to-do-list__priority">
                     </span>
-                    <span class="to-do-list__deadline">
-                        <?php echo $task->date ?>
+                    <span class="to-do-list__deadline" data-date="<?php echo $task->date ?>">
+                        <?php
+                        $date = date_create_from_format('Y-m-d', $task->date);
+                        $formattedDate = $date->format('M d')
+                        ;?>
+                        <?php echo $formattedDate ?>
                     </span>
                     <span class="to-do-list__buttons">
                         <span class="to-do-list__delete-task">X</span>

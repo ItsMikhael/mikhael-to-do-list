@@ -95,9 +95,12 @@ class MikhaelToDoList
         ), array('%s', '%s', '%s', '%s', '%d'));
 
         if ($inserted) {
+            $date = date_create_from_format('Y-m-d', $_POST['task_deadline']);
+            $formattedDate = $date->format('M d');
             echo json_encode([
                 'result' => 'success',
                 'task_id' => $wpdb->insert_id,
+                'date' => $formattedDate,
             ]);
         } else {
             echo json_encode([
@@ -130,8 +133,11 @@ class MikhaelToDoList
         ), array('%s', '%s', '%s', '%s', '%d', '%d'));
 
         if ($updated) {
+            $date = date_create_from_format('Y-m-d', $_POST['task_deadline']);
+            $formattedDate = $date->format('M d');
             echo json_encode([
                 'result' => 'success',
+                'date' => $formattedDate,
             ]);
         } else {
             echo json_encode([

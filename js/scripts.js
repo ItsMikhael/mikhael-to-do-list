@@ -24,7 +24,7 @@ jQuery(document).ready(function () {
         const task_id = list_item.data('task-id');
         const task_text = list_item.children('.to-do-list__item-title').html().trim();
         const task_prio = list_item.children('.to-do-list__priority').html().trim();
-        const task_deadline = list_item.children('.to-do-list__deadline').html().trim();
+        const task_deadline = list_item.children('.to-do-list__deadline').data('date');
 
         // Update the modal with current task details
         jQuery('.todolist-modal_edit input[type=text]').attr('data-task-id', task_id);
@@ -125,8 +125,8 @@ jQuery(document).ready(function () {
                                     <span class="to-do-list__priority">
                                         ${task_prio}
                                     </span>
-                                    <span class="to-do-list__deadline">
-                                        ${task_deadline}
+                                    <span class="to-do-list__deadline" data-date="${task_deadline}">
+                                        ${response_decoded.date}
                                     </span>
                                     <span class="to-do-list__buttons">
                                         <span class="to-do-list__task-done">
@@ -169,7 +169,8 @@ jQuery(document).ready(function () {
                     list_item.addClass(prio_class);
                     jQuery(list_item).find('.to-do-list__item-title').html(task_text);
                     jQuery(list_item).find('.to-do-list__priority').html(task_prio);
-                    jQuery(list_item).find('.to-do-list__deadline').html(task_deadline);
+                    jQuery(list_item).find('.to-do-list__deadline').html(response_decoded.date);
+                    jQuery(list_item).find('.to-do-list__deadline').attr('data-date', task_deadline);
                     jQuery('.todolist-modal_edit input[type=text]').val('');
                     jQuery('.todolist-modal_edit').hide();
                 }
@@ -215,7 +216,7 @@ jQuery(document).ready(function () {
         );
     }
 
-    /* Function for getting prio class based on priority */
+    /* Function for getting class using task priority */
     function get_prio_class(task_prio) {
         let prio_class = '';
         if (task_prio === 'Low Priority') {
