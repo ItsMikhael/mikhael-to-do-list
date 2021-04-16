@@ -223,6 +223,10 @@
     color: black;
 }
 
+.close-mobile-icon {
+    display: none;
+}
+
 .pagination {
     padding: 20px;
 }
@@ -294,12 +298,6 @@
         left: 0;
         transform: none;
         width: 100vw;
-    }
-}
-
-@media (min-width: 576px) {
-    .close-mobile-icon {
-        display: none;
     }
 }
 
