@@ -20,6 +20,7 @@ class MikhaelToDoList
         add_action('admin_enqueue_scripts', array($this, 'todolist_admin_enqueue_scripts'));
         add_action('wp_ajax_todolist_create_new_task', array($this, 'todolist_create_new_task'));
         add_action('wp_ajax_todolist_update_task', array($this, 'todolist_update_task'));
+        add_action('wp_ajax_todolist_task_done', array($this, 'todolist_task_done'));
         add_action('wp_ajax_todolist_delete_task', array($this, 'todolist_delete_task'));
     }
 
@@ -125,6 +126,33 @@ class MikhaelToDoList
         ), array(
             'id' => $_POST['task_id'],
         ), array('%s', '%s', '%s', '%d', '%d'));
+
+        if ($updated) {
+            echo json_encode([
+                'result' => 'success',
+            ]);
+        } else {
+            echo json_encode([
+                'result' => 'fail',
+            ]);
+        }
+
+
+        wp_die();
+    }
+
+    /**
+     * Update task status to done
+     */
+    function todolist_task_done() {
+        global $wpdb;
+
+        $table_name  = $wpdb->prefix .'todolist';
+        $updated = $wpdb->update($table_name, array(
+            'status' => 'done',
+        ), array(
+            'id' => $_POST['task_id'],
+        ), array('%s', '%d'));
 
         if ($updated) {
             echo json_encode([

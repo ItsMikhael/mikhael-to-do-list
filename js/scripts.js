@@ -31,7 +31,14 @@ jQuery(document).ready(function () {
         jQuery('.todolist-modal_edit input[type=text]').val(task_text);
         jQuery('.todolist-modal_edit #priority').val(task_prio);
         jQuery('.todolist-modal_edit input[type=date]').val(task_deadline);
-    })
+    });
+
+    todolist.on('click', '.to-do-list__task-done', function() {
+        const list_item = jQuery(this).parents('.to-do-list__item')
+        const task_id = list_item.data('task-id');
+
+        change_task_status_to_done(task_id);
+    });
 
     // Run create task function after pressing save on create task modal
     jQuery('.create-task-button').on('click', function () {
@@ -40,7 +47,7 @@ jQuery(document).ready(function () {
         const task_deadline = jQuery('.todolist-modal_create input[type=date]').val();
 
         create_task(task_text, task_prio, task_deadline);
-    })
+    });
 
     // Run update task function after pressing save on edit task modal
     jQuery('.edit-task-button').on('click', function () {
@@ -50,25 +57,25 @@ jQuery(document).ready(function () {
         const task_deadline = jQuery('.todolist-modal_edit input[type=date]').val();
 
         update_task(task_text, task_prio, task_deadline, task_id);
-    })
+    });
 
     /* Delete the task after pressing the delete button */
     todolist.on("click", ".to-do-list__delete-task", function () {
         const task_id = jQuery(this).parents('.to-do-list__item').data('task-id');
         delete_task(task_id);
-    })
+    });
 
     jQuery('.close-modal-button').on('click', function () {
         jQuery(this).closest('.todolist-modal').hide();
-    })
+    });
 
     jQuery('.todolist-modal__background').on('click', function () {
         jQuery(this).closest('.todolist-modal').hide();
-    })
+    });
 
     jQuery('.todolist-modal__wrapper').on('click', function (e) {
         e.stopPropagation();
-    })
+    });
 
     /* The function handling task creation */
     function create_task(task_text, task_prio, task_deadline) {
@@ -95,9 +102,12 @@ jQuery(document).ready(function () {
                                         ${task_deadline}
                                     </span>
                                     <span class="to-do-list__buttons">
-                                    <span class="to-do-list__edit-task">
-                                        <img src="` + plugin_url + `images/edit_icon.svg" alt="edit icon">
-                                    </span>
+                                        <span class="to-do-list__task-done">
+                                            <img src="` + plugin_url + `images/done.svg" alt="done icon">
+                                        </span>
+                                        <span class="to-do-list__edit-task">
+                                            <img src="` + plugin_url + `images/edit_icon.svg" alt="edit icon">
+                                        </span>
                                         <span class="to-do-list__delete-task">X</span>
                                     </span>
                                 </div>
@@ -134,6 +144,26 @@ jQuery(document).ready(function () {
         );
     }
 
+    /* The function handling task status change to finished */
+    function change_task_status_to_done(task_id) {
+        let data = {
+            'action': 'todolist_task_done',
+            'task_id': task_id,
+        }
+
+        jQuery.post(ajaxurl, data, function (response) {
+                const response_decoded = JSON.parse(response);
+                // Append the list with the new task after it has been successfully added
+                if (response_decoded.result === 'success') {
+                    let list_item = jQuery('.to-do-list__item[data-task-id=' + task_id + ']');
+                    list_item.addClass('task_done');
+                    list_item.find('.to-do-list__task-done').remove();
+                    list_item.find('.to-do-list__edit-task').remove();
+                }
+            }
+        );
+    }
+
     /* The function handling task deletion */
     function delete_task(task_id) {
         let data = {
@@ -151,5 +181,5 @@ jQuery(document).ready(function () {
         );
     }
 
-})
+});
 

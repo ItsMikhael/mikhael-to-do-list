@@ -2,6 +2,13 @@
     --clr-main: #e6e6e6;
     --clr-accent: #11cdef;
     --clr-accent-darker: #5e72e4;
+    --clr-green: #7dcc74;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 .todolist-wrapper {
@@ -27,10 +34,17 @@
     box-shadow: 0 4px 0 0 var(--clr-accent) !important;
 }
 
+.to-do-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+}
+
 .to-do-list__item {
-    padding: 1rem 0;
+    padding: 1rem;
     display: flex;
     width: 100%;
+    border-radius: 8px;
 }
 
 .to-do-list__item > * {
@@ -53,17 +67,21 @@
 .to-do-list__buttons > * {
     cursor: pointer;
     display: inline-block;
-    margin-left: 0.35rem;
+    margin-left: 0.5rem;
 }
 
 .to-do-list__edit-task img {
     height: 22px;
 }
 
+.to-do-list__task-done img {
+    height: 22px;
+}
+
 .to-do-list__delete-task {
     height: 22px;
     vertical-align: top;
-    padding: 2px 0;
+    padding: 1px 0;
     color: red;
 }
 
@@ -172,6 +190,10 @@
 
 .heading_inline {
     display: inline-block;
+}
+
+.task_done {
+    background-color: var(--clr-green);
 }
 
 @media (max-width: 576px) {
